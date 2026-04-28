@@ -12,6 +12,9 @@
 
 ---
 
+<img width="960" height="593" alt="Gemma4-Vibecoding" src="https://github.com/user-attachments/assets/b4149e63-48df-456e-8007-c607b7d46f37" />
+
+
 ## The Idea
 
 What if you could vibe code from an airplane? Or a cabin with no cell signal? Or just... without sending your code to someone else's server?
@@ -124,7 +127,7 @@ src/
 - [MLX](https://github.com/ml-explore/mlx) by Apple Machine Learning Research
 - [transformers.js](https://github.com/huggingface/transformers.js) by Hugging Face
 
-Created by [@ammaar](https://x.com/ammaar)
+Created by [@ammaar](https://x.com/ammaar) and AI :) 
 
 ## License
 
