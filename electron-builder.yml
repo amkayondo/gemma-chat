@@ -21,6 +21,20 @@ mac:
   gatekeeperAssess: false
 dmg:
   artifactName: ${name}-${version}.${ext}
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64]
+nsis:
+  artifactName: ${name}-setup-${version}.${ext}
+linux:
+  icon: build/icon.png
+  target:
+    - target: AppImage
+      arch: [x64]
+appImage:
+  artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
   provider: generic

@@ -1,0 +1,79 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  build:
+    name: Build (${{ matrix.platform }})
+    needs: test
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            build-cmd: npx electron-builder --mac --publish never
+            artifact-path: |
+              dist/*.dmg
+          - os: windows-latest
+            platform: win
+            build-cmd: npx electron-builder --win --publish never
+            artifact-path: |
+              dist/*.exe
+          - os: ubuntu-latest
+            platform: linux
+            build-cmd: npx electron-builder --linux --publish never
+            artifact-path: |
+              dist/*.AppImage
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
+
+      - name: Build app (electron-vite)
+        run: npm run build
+
+      - name: Package executable
+        run: ${{ matrix.build-cmd }}
+        env:
+          # Use the official GitHub mirror so CI runners can always reach it
+          ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemma-chat-${{ matrix.platform }}
+          path: ${{ matrix.artifact-path }}
+          if-no-files-found: warn
